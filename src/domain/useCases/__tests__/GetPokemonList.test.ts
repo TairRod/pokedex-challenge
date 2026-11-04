@@ -15,7 +15,7 @@ describe('GetPokemonList', () => {
     ];
 
     const repository: jest.Mocked<PokemonRepository> = {
-      getPokemonsList: jest.fn().mockResolvedValue(pokemonList),
+      getPokemonList: jest.fn().mockResolvedValue(pokemonList),
       getPokemonDetail: jest.fn(),
     };
 
@@ -26,13 +26,13 @@ describe('GetPokemonList', () => {
 
     //Assert
     expect(result).toEqual(pokemonList);
-    expect(repository.getPokemonsList).toHaveBeenCalledWith(20, 0);
+    expect(repository.getPokemonList).toHaveBeenCalledWith(20, 0);
   });
 
   it('should support custom pagination parameters', async () => {
     //Arrange
     const repository: jest.Mocked<PokemonRepository> = {
-      getPokemonsList: jest.fn().mockResolvedValue([]),
+      getPokemonList: jest.fn().mockResolvedValue([]),
       getPokemonDetail: jest.fn(),
     };
 
@@ -42,6 +42,6 @@ describe('GetPokemonList', () => {
     await useCase.execute(20, 20);
 
     //Assert
-    expect(repository.getPokemonsList).toHaveBeenCalledWith(20, 20);
+    expect(repository.getPokemonList).toHaveBeenCalledWith(20, 20);
   });
 });
