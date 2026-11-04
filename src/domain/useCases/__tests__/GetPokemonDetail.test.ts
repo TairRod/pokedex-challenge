@@ -9,7 +9,7 @@ describe('GetPokemonDetail', () => {
     imageUrl:
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png',
     types: ['electric'],
-    abilieties: ['static', 'lightning-rod'],
+    abilities: ['static', 'lightning-rod'],
     stats: [
       {
         name: 'speed',
