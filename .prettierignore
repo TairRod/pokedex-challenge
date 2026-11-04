@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+vendor/
+ios/Pods/
+
+# Android generated files
+android/.gradle/
+android/.cxx/
+android/app/.cxx/
+android/build/
+android/app/build/
+
+# iOS generated files
+ios/build/
+ios/DerivedData/
+
+# Generated artifacts
+coverage/
+dist/
+build/
+.expo/
+.expo-shared/
+
+# Lock files managed by package managers
+package-lock.json
+yarn.lock
