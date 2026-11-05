@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { theme } from '../../theme';
+import { formatDisplayText } from '../../utils/pokemonFormatters';
 
 interface PokemonAbilitiesProps {
   abilities: string[];
@@ -19,7 +20,7 @@ export default function PokemonAbilities({ abilities }: PokemonAbilitiesProps) {
 function AbilityChip({ ability }: { ability: string }) {
   return (
     <View style={styles.abilityChip}>
-      <Text style={styles.abilityChipText}>{ability}</Text>
+      <Text style={styles.abilityChipText}>{formatDisplayText(ability)}</Text>
     </View>
   );
 }
@@ -34,7 +35,6 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.fontSize.lg,
     fontWeight: 'bold',
     marginTop: theme.spacing.lg,
-    marginBottom: theme.spacing.lg,
   },
   abilityChip: {
     padding: theme.spacing.sm,

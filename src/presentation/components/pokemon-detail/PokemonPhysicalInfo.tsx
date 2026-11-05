@@ -12,9 +12,7 @@ function PhisicalItem({ value, tagTitle, unit }: PhisicalItemProps) {
       <Text style={styles.value}>
         {(value / 10).toFixed(1)} {unit}
       </Text>
-      <Text style={styles.tag}>
-        {tagTitle} {unit}
-      </Text>
+      <Text style={styles.tag}>{tagTitle}</Text>
     </View>
   );
 }
@@ -50,7 +48,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: theme.typography.fontSize.lg,
     fontWeight: theme.typography.fontWeight.bold,
-    marginBottom: theme.spacing.lg,
+
     marginTop: theme.spacing.lg,
   },
   value: {

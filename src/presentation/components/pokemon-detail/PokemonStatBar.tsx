@@ -1,22 +1,30 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { formatStatName } from '../../utils/pokemonFormatters';
 interface PokemonStatBarProps {
   label: string;
   value: number;
+  color: string;
 }
 
 const MAX_STAT = 255;
 
-function PokemonStatBar({ label, value }: PokemonStatBarProps) {
+function PokemonStatBar({ label, value, color }: PokemonStatBarProps) {
   const percentage = Math.min(Math.max((value / MAX_STAT) * 100, 0), 100);
 
   return (
     <View style={styles.row}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={styles.label}>{formatStatName(label)}</Text>
       <Text style={styles.value}>{value}</Text>
 
       <View style={styles.track}>
-        <View style={[styles.progress, { width: `${percentage}%` }]} />
+        <View
+          style={[
+            styles.progress,
+            { width: `${percentage}%` },
+            { backgroundColor: color },
+          ]}
+        />
       </View>
     </View>
   );
@@ -50,7 +58,6 @@ const styles = StyleSheet.create({
   },
   progress: {
     height: '100%',
-    backgroundColor: '#65B58B',
     borderRadius: 8,
   },
 });

@@ -46,7 +46,6 @@ export function PokemonDetailScreen({ route }: Props) {
 
   return (
     <ScrollView
-      style={styles.container}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
@@ -59,7 +58,7 @@ export function PokemonDetailScreen({ route }: Props) {
 
       <PokemonPhysicalInfo weight={data.weight} height={data.height} />
       <PokemonAbilities abilities={data.abilities} />
-      <PokemonStats stats={data.stats} />
+      <PokemonStats stats={data.stats} types={data.types} />
     </ScrollView>
   );
 }
@@ -71,8 +70,7 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: 'center',
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.xl,
+    paddingBottom: theme.spacing.lg,
     gap: theme.spacing.lg,
   },
 });

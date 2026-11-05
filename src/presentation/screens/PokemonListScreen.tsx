@@ -10,6 +10,7 @@ import { theme } from '../theme';
 import PaginationFooter from '../components/feedback/PaginationFooter';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../navigation/types';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'PokemonList'>;
 
@@ -73,7 +74,7 @@ export function PokemonListScreen({ navigation }: Props) {
     );
   }
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <Text style={styles.title}>Pokedex</Text>
 
       <FlatList
@@ -106,7 +107,7 @@ export function PokemonListScreen({ navigation }: Props) {
           />
         }
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
