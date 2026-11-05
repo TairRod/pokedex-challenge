@@ -18,6 +18,7 @@ export function PokemonListScreen({ navigation }: Props) {
     data,
     isPending,
     isError,
+    isPaused,
     refetch,
     fetchNextPage,
     hasNextPage,
@@ -29,6 +30,20 @@ export function PokemonListScreen({ navigation }: Props) {
   const pokemon = React.useMemo(() => {
     return data?.pages.flatMap((page) => page) || [];
   }, [data]);
+
+  if (isPending && isPaused) {
+    return (
+      <View style={styles.center}>
+        <ErrorState
+          title="Pokédex unavailable offline"
+          message="Connect to the internet to load Pokémon."
+          onPress={() => {
+            refetch();
+          }}
+        />
+      </View>
+    );
+  }
 
   if (isPending) {
     return (
@@ -74,7 +89,7 @@ export function PokemonListScreen({ navigation }: Props) {
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.listContent}
         onEndReached={() => {
-          if (hasNextPage && !isFetching && !isFetchingNextPage) {
+          if (hasNextPage && !isFetching && !isFetchNextPageError) {
             fetchNextPage();
           }
         }}
