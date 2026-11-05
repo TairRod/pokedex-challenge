@@ -8,8 +8,12 @@ import ErrorState from '../components/feedback/ErrorState';
 import EmptyState from '../components/feedback/EmptyState';
 import { theme } from '../theme';
 import PaginationFooter from '../components/feedback/PaginationFooter';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../navigation/types';
 
-export function PokemonListScreen() {
+type Props = NativeStackScreenProps<RootStackParamList, 'PokemonList'>;
+
+export function PokemonListScreen({ navigation }: Props) {
   const {
     data,
     isPending,
@@ -60,12 +64,17 @@ export function PokemonListScreen() {
       <FlatList
         data={pokemon}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <PokemonCard pokemon={item} />}
+        renderItem={({ item }) => (
+          <PokemonCard
+            pokemon={item}
+            onPress={() => navigation.navigate('PokemonDetail', { id: item.id })}
+          />
+        )}
         numColumns={2}
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.listContent}
         onEndReached={() => {
-          if (hasNextPage && !isFetching) {
+          if (hasNextPage && !isFetching && !isFetchingNextPage) {
             fetchNextPage();
           }
         }}

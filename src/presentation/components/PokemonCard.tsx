@@ -1,22 +1,24 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { Pressable, Text, StyleSheet, Image } from 'react-native';
 import type { PokemonSummary } from '../../domain/entities/Pokemon';
 import { theme } from '../theme';
 import React from 'react';
+import { formatPokedexNumber, capitalizePokemonName } from '../utils/pokemonFormatters';
 
 interface PokemonCardProps {
   pokemon: PokemonSummary;
+  onPress: () => void;
 }
 
-export const PokemonCard = React.memo(({ pokemon }: PokemonCardProps) => {
+export const PokemonCard = React.memo(({ pokemon, onPress }: PokemonCardProps) => {
   const { id, name, imageUrl } = pokemon;
-  const pokedexNumber = `#${id.toString().padStart(3, '0')}`;
-  const pokemonName = name.charAt(0).toUpperCase() + name.slice(1);
+  const pokedexNumber = formatPokedexNumber(id);
+  const pokemonName = capitalizePokemonName(name);
   return (
-    <View style={styles.container}>
+    <Pressable style={styles.container} onPress={onPress}>
       <Text style={styles.numberLabel}>{pokedexNumber}</Text>
       <Image style={styles.image} source={{ uri: imageUrl }} resizeMode="contain" />
       <Text style={styles.name}>{pokemonName}</Text>
-    </View>
+    </Pressable>
   );
 });
 
