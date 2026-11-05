@@ -1,8 +1,9 @@
-import { Pressable, Text, StyleSheet, Image } from 'react-native';
+import { Pressable, Text, StyleSheet } from 'react-native';
 import type { PokemonSummary } from '../../domain/entities/Pokemon';
 import { theme } from '../theme';
 import React from 'react';
 import { formatPokedexNumber, capitalizePokemonName } from '../utils/pokemonFormatters';
+import { PokemonImage } from './PokemonImage';
 
 interface PokemonCardProps {
   pokemon: PokemonSummary;
@@ -16,7 +17,7 @@ export const PokemonCard = React.memo(({ pokemon, onPress }: PokemonCardProps) =
   return (
     <Pressable style={styles.container} onPress={onPress}>
       <Text style={styles.numberLabel}>{pokedexNumber}</Text>
-      <Image style={styles.image} source={{ uri: imageUrl }} resizeMode="contain" />
+      <PokemonImage imageUrl={imageUrl} style={styles.image} />
       <Text style={styles.name}>{pokemonName}</Text>
     </Pressable>
   );

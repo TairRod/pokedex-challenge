@@ -16,8 +16,17 @@ type Props = NativeStackScreenProps<RootStackParamList, 'PokemonDetail'>;
 
 export function PokemonDetailScreen({ route }: Props) {
   const { id } = route.params;
-  const { data, isPending, isError, refetch } = usePokemonDetail(id); // const { data, isLoading, isError } = usePokemonDetail(id);
+  const { data, isPending, isError, isPaused, refetch } = usePokemonDetail(id);
 
+  if (isPending && isPaused) {
+    return (
+      <ErrorState
+        title="Pokémon unavailable offline"
+        message="Connect to the internet to load this Pokémon's details."
+        onPress={() => refetch()}
+      />
+    );
+  }
   if (isPending) {
     return <LoadingState title="Loading..." message="Getting Pokemon details" />;
   }
