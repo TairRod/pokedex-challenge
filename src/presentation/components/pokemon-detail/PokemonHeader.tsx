@@ -13,7 +13,7 @@ interface PokemonHeaderProps {
   types: string[];
 }
 
-function typeChip(type: string) {
+function TypeChip({ type }: { type: string }) {
   return (
     <View style={styles.typeChip}>
       <Text>{type}</Text>
@@ -30,7 +30,7 @@ export default function PokemonHeader({ imageUrl, name, id, types }: PokemonHead
       <Image style={styles.image} source={{ uri: imageUrl }} resizeMode="contain" />
       <Text style={styles.name}>{pokemonName}</Text>
       <View style={styles.typesContainer}>
-        {types && types.map((type) => typeChip(type))}
+        {types && types.map((type) => <TypeChip key={type} type={type} />)}
       </View>
     </View>
   );
