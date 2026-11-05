@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { usePokemonDetail } from '../hooks/usePokemonDetail';
 
@@ -11,6 +11,7 @@ import PokemonHeader from '../components/pokemon-detail/PokemonHeader';
 import PokemonPhysicalInfo from '../components/pokemon-detail/PokemonPhysicalInfo';
 import PokemonAbilities from '../components/pokemon-detail/PokemonAbilities';
 import PokemonStats from '../components/pokemon-detail/PokemonStats';
+import { theme } from '../theme';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'PokemonDetail'>;
 
@@ -44,7 +45,11 @@ export function PokemonDetailScreen({ route }: Props) {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+    >
       <PokemonHeader
         imageUrl={data.imageUrl}
         name={data.name}
@@ -55,7 +60,7 @@ export function PokemonDetailScreen({ route }: Props) {
       <PokemonPhysicalInfo weight={data.weight} height={data.height} />
       <PokemonAbilities abilities={data.abilities} />
       <PokemonStats stats={data.stats} />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -63,9 +68,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor: theme.colors.background,
   },
-  image: {
-    width: 130,
-    height: 130,
+  content: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.xl,
+    alignItems: 'center',
+    gap: theme.spacing.lg,
+    paddingBottom: theme.spacing.xxxl,
   },
 });
