@@ -7,9 +7,24 @@ import LoadingState from '../components/feedback/LoadingState';
 import ErrorState from '../components/feedback/ErrorState';
 import EmptyState from '../components/feedback/EmptyState';
 import { theme } from '../theme';
+import PaginationFooter from '../components/feedback/PaginationFooter';
 
 export function PokemonListScreen() {
-  const { data, isPending, isError, refetch } = usePokemonList();
+  const {
+    data,
+    isPending,
+    isError,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    isFetchNextPageError,
+  } = usePokemonList();
+
+  const pokemon = React.useMemo(() => {
+    return data?.pages.flatMap((page) => page) || [];
+  }, [data]);
 
   if (isPending) {
     return (
@@ -19,7 +34,7 @@ export function PokemonListScreen() {
     );
   }
 
-  if (isError) {
+  if (isError && pokemon.length === 0) {
     return (
       <View style={styles.center}>
         <ErrorState
@@ -31,7 +46,7 @@ export function PokemonListScreen() {
     );
   }
 
-  if (data && data.length === 0) {
+  if (pokemon.length === 0 && !isPending && !isError) {
     return (
       <View style={styles.center}>
         <EmptyState title="No Pokemons found" message={"We couldn't find any pokemon."} />
@@ -43,12 +58,29 @@ export function PokemonListScreen() {
       <Text style={styles.title}>Pokédex</Text>
 
       <FlatList
-        data={data}
+        data={pokemon}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <PokemonCard pokemon={item} />}
         numColumns={2}
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.listContent}
+        onEndReached={() => {
+          if (hasNextPage && !isFetching) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          <PaginationFooter
+            isLoading={isFetchingNextPage}
+            isError={isFetchNextPageError}
+            onRetry={() => {
+              if (!isFetching) {
+                fetchNextPage();
+              }
+            }}
+          />
+        }
       />
     </View>
   );
