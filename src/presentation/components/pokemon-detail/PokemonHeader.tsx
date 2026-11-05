@@ -1,10 +1,11 @@
-import { Text, View, Image, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { theme } from '../../theme';
 import React from 'react';
 import {
   formatPokedexNumber,
   capitalizePokemonName,
 } from '../../utils/pokemonFormatters';
+import { PokemonImage } from '../PokemonImage';
 
 interface PokemonHeaderProps {
   imageUrl: string;
@@ -27,7 +28,7 @@ export default function PokemonHeader({ imageUrl, name, id, types }: PokemonHead
   return (
     <View style={styles.container}>
       <Text style={styles.numberLabel}>{pokedexNumber}</Text>
-      <Image style={styles.image} source={{ uri: imageUrl }} resizeMode="contain" />
+      <PokemonImage imageUrl={imageUrl} style={styles.image} />
       <Text style={styles.name}>{pokemonName}</Text>
       <View style={styles.typesContainer}>
         {types && types.map((type) => <TypeChip key={type} type={type} />)}

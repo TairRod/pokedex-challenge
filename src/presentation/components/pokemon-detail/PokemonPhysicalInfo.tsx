@@ -31,8 +31,8 @@ export default function PokemonPhysicalInfo({
     <>
       <Text style={styles.title}>Physical info</Text>
       <View style={styles.container}>
-        <PhisicalItem value={weight} tagTitle="Weight" unit="kg" />
-        <PhisicalItem value={height} tagTitle="Height" unit="m" />
+        <PhisicalItem key={weight} value={weight} tagTitle="Weight" unit="kg" />
+        <PhisicalItem key={height} value={height} tagTitle="Height" unit="m" />
       </View>
     </>
   );

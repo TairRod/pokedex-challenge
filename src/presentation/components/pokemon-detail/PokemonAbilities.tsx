@@ -9,13 +9,14 @@ export default function PokemonAbilities({ abilities }: PokemonAbilitiesProps) {
     <>
       <Text style={styles.title}>Abilities</Text>
       <View style={styles.container}>
-        {abilities && abilities.map((ability) => abilityChip(ability))}
+        {abilities &&
+          abilities.map((ability) => <AbilityChip key={ability} ability={ability} />)}
       </View>
     </>
   );
 }
 
-function abilityChip(ability: string) {
+function AbilityChip({ ability }: { ability: string }) {
   return (
     <View style={styles.abilityChip}>
       <Text style={styles.abilityChipText}>{ability}</Text>
