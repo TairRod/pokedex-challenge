@@ -3,10 +3,10 @@ export interface Pokemon {
   name: string;
   imageUrl: string;
   types: PokemonType[];
-  abilieties: string[];
+  abilities: string[];
   height: number;
   weight: number;
-  baseExperience: number;
+  baseExperience: number | null;
   stats: PokemonStat[];
 }
 
@@ -15,24 +15,31 @@ export interface PokemonStat {
   value: number;
 }
 
-export type PokemonType =
-  | 'norma'
-  | 'fighting'
-  | 'flying'
-  | 'poison'
-  | 'ground'
-  | 'rock'
-  | 'bug'
-  | 'ghost'
-  | 'steel'
-  | 'fire'
-  | 'water'
-  | 'grass'
-  | 'electric'
-  | 'psychic'
-  | 'ice'
-  | 'dragon'
-  | 'dark'
-  | 'fairy';
+export const POKEMON_TYPES = [
+  'normal',
+  'fire',
+  'water',
+  'electric',
+  'grass',
+  'ice',
+  'fighting',
+  'poison',
+  'ground',
+  'flying',
+  'psychic',
+  'bug',
+  'rock',
+  'ghost',
+  'dragon',
+  'dark',
+  'steel',
+  'fairy',
+] as const;
+
+export type PokemonType = (typeof POKEMON_TYPES)[number];
+
+export function isPokemonType(value: string): value is PokemonType {
+  return POKEMON_TYPES.some((type) => type === value);
+}
 
 export type PokemonSummary = Pick<Pokemon, 'id' | 'name' | 'imageUrl'>;

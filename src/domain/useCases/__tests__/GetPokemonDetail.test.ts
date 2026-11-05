@@ -9,7 +9,7 @@ describe('GetPokemonDetail', () => {
     imageUrl:
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png',
     types: ['electric'],
-    abilieties: ['static', 'lightning-rod'],
+    abilities: ['static', 'lightning-rod'],
     stats: [
       {
         name: 'speed',
@@ -24,7 +24,7 @@ describe('GetPokemonDetail', () => {
   it('should return the requested Pokemon', async () => {
     //Arrange
     const repository: jest.Mocked<PokemonRepository> = {
-      getPokemonsList: jest.fn(),
+      getPokemonList: jest.fn(),
       getPokemonDetail: jest.fn().mockResolvedValue(pikachu),
     };
 
@@ -36,6 +36,6 @@ describe('GetPokemonDetail', () => {
     //Assert
     expect(result).toEqual(pikachu);
     expect(repository.getPokemonDetail).toHaveBeenCalledWith(25);
-    expect(repository.getPokemonsList).not.toHaveBeenCalledTimes(1);
+    expect(repository.getPokemonList).not.toHaveBeenCalledTimes(1);
   });
 });
