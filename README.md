@@ -1,97 +1,292 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Pokédex Challenge
 
-# Getting Started
+A React Native application built with **TypeScript and Clean Architecture**, using [PokéAPI](https://pokeapi.co/) to browse Pokémon and explore their details.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+The project focuses on maintainability, separation of concerns, type safety, testability, and offline data availability.
 
-## Step 1: Start Metro
+## Features
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- **Pokémon listing:** Displays Pokémon names, Pokédex numbers, and images.
+- **Infinite scrolling:** Loads Pokémon in pages of 20 using TanStack Query.
+- **Pokémon details:** Displays types, abilities, height, weight, and base statistics.
+- **Navigation:** Provides typed navigation between the list and detail screens.
+- **UI states:** Handles loading, error, empty, and offline scenarios.
+- **Offline persistence:** Saves previously fetched Pokémon data across app restarts.
+- **Connectivity handling:** Detects network changes and resumes paused requests.
+- **Image fallback:** Displays a local placeholder when a remote image cannot be loaded.
+- **Reusable components:** Shares UI components, theme values, and formatting utilities.
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+## Tech Stack
 
-```sh
-# Using npm
-npm start
+| Technology          | Purpose                                          |
+| ------------------- | ------------------------------------------------ |
+| React Native CLI    | Native Android and iOS application               |
+| TypeScript          | Static typing and safer contracts                |
+| React Navigation    | Typed stack navigation                           |
+| TanStack Query      | Server-state management, caching, and pagination |
+| AsyncStorage        | Persistent query cache                           |
+| NetInfo             | Network connectivity detection                   |
+| Jest                | Unit and basic application tests                 |
+| ESLint & Prettier   | Code quality and formatting                      |
+| Husky & lint-staged | Pre-commit checks                                |
+| GitHub Actions      | Continuous integration                           |
 
-# OR using Yarn
-yarn start
+## Architecture
+
+The application follows a layered approach inspired by **Clean Architecture**, separating business logic, data access, and presentation.
+
+```text
+src/
+├── app/
+│   ├── di/               # Dependency composition
+│   └── providers/        # Query, persistence, and connectivity
+├── domain/
+│   ├── entities/         # Domain models
+│   ├── repositories/     # Repository contracts
+│   └── useCases/         # Application use cases
+├── data/
+│   ├── api/              # HTTP communication
+│   ├── dto/              # API response structures
+│   ├── mappers/          # DTO-to-domain transformations
+│   ├── repositories/     # Repository implementations
+│   └── validators/       # Runtime response validation
+├── presentation/
+│   ├── components/       # Reusable UI components
+│   ├── hooks/            # Query hooks
+│   ├── navigation/       # Navigation configuration
+│   ├── screens/          # Application screens
+│   ├── theme/            # Design tokens
+│   └── utils/            # Presentation helpers
+└── assets/               # Local image assets
 ```
 
-## Step 2: Build and run your app
+### Domain Layer
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+Contains the core application models, repository contracts, and use cases.
+
+It does not depend on React Native, navigation, or external API implementations.
+
+The main use cases are:
+
+- `GetPokemonList`
+- `GetPokemonDetail`
+
+### Data Layer
+
+Implements the domain repository contracts and communicates with PokéAPI.
+
+Responsibilities include:
+
+- Fetching remote data through an HTTP client.
+- Validating external responses at runtime.
+- Mapping API DTOs into domain entities.
+- Translating HTTP and response errors into predictable failures.
+
+### Presentation Layer
+
+Contains screens, UI components, navigation, and custom hooks.
+
+Screens coordinate data retrieval and rendering, while reusable components focus on displaying information.
+
+The presentation layer consumes use cases instead of directly calling API endpoints.
+
+### Dependency Composition
+
+Dependencies are assembled centrally in `src/app/di/container.ts`.
+
+The repository receives an HTTP client through constructor injection, allowing implementations to be replaced without changing business logic.
+
+This also makes domain and data logic easier to test with mocks.
+
+## Key Technical Decisions
+
+### TanStack Query instead of global client-state management
+
+The application's main state comes from a remote API.
+
+TanStack Query provides caching, request status, retries, pagination, and data synchronization without introducing a separate global store.
+
+- `useInfiniteQuery` manages paginated Pokémon lists.
+- `useQuery` retrieves individual Pokémon details.
+- Query keys identify and cache requests independently.
+
+Redux Toolkit or Zustand would introduce additional state-management complexity without a clear requirement.
+
+### Repository Pattern and Dependency Injection
+
+Repository interfaces are defined independently of their implementations.
+
+This allows use cases to depend on contracts instead of specific HTTP libraries or API details.
+
+Constructor injection also enables isolated tests using mocked dependencies.
+
+### Runtime Validation
+
+TypeScript types do not validate network responses at runtime.
+
+API responses are treated as `unknown` and validated before being transformed into domain entities.
+
+This helps prevent unexpected external data from propagating into the application.
+
+### Offline Persistence
+
+TanStack Query's cache is persisted using AsyncStorage.
+
+Previously fetched Pokémon data can be restored after restarting the application, within the configured cache lifetime.
+
+NetInfo is integrated with TanStack Query's `onlineManager` to manage connectivity changes and paused requests.
+
+### Image Handling
+
+Remote images are displayed using React Native's built-in `Image` component.
+
+A reusable image component displays a local placeholder when loading fails and retries after reconnection.
+
+No additional image-loading dependency was introduced because the current requirements can be handled with React Native's built-in capabilities.
+
+## Requirements
+
+- Node.js **22.11.0 or later**
+- npm
+- React Native CLI development environment
+- Android Studio and Android SDK for Android development
+- macOS with Xcode and CocoaPods for iOS development
+
+Follow the official [React Native environment setup guide](https://reactnative.dev/docs/set-up-your-environment) if the native development environment is not already configured.
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/TairRod/pokedex-challenge.git
+cd pokedex-challenge
+```
+
+Install dependencies:
+
+```bash
+npm ci
+```
 
 ### Android
 
-```sh
-# Using npm
-npm run android
+Start Metro:
 
-# OR using Yarn
-yarn android
+```bash
+npm start
+```
+
+In another terminal, run:
+
+```bash
+npm run android
+```
+
+To build and install a Release version:
+
+```bash
+npx react-native run-android --mode release
 ```
 
 ### iOS
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+Install native dependencies:
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
+```bash
 bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
+cd ios
 bundle exec pod install
+cd ..
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+Start Metro:
 
-```sh
-# Using npm
+```bash
+npm start
+```
+
+In another terminal, run:
+
+```bash
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+To run a Release build in the simulator:
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+```bash
+npx react-native run-ios --mode Release
+```
 
-## Step 3: Modify your app
+An appropriately configured Xcode environment is required.
 
-Now that you have successfully run the app, let's make changes!
+## Testing and Code Quality
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+The project uses Jest for unit testing and basic application verification.
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+Tests cover domain use cases and data-layer components such as the HTTP client, repository implementation, mappers, and response validators.
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+Native dependencies including AsyncStorage and NetInfo are mocked in the Jest environment.
 
-## Congratulations! :tada:
+Run tests:
 
-You've successfully run and modified your React Native App. :partying_face:
+```bash
+npm test
+```
 
-### Now what?
+Run tests in CI mode:
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+```bash
+npm run test:ci
+```
 
-# Troubleshooting
+Check TypeScript types:
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+```bash
+npm run typecheck
+```
 
-# Learn More
+Run ESLint:
 
-To learn more about React Native, take a look at the following resources:
+```bash
+npm run lint
+```
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Check formatting:
+
+```bash
+npm run format:check
+```
+
+Automatically format the project:
+
+```bash
+npm run format
+```
+
+### Continuous Integration
+
+GitHub Actions is configured to run code-quality checks.
+
+Husky and lint-staged provide additional pre-commit validation to help maintain consistent formatting and code quality.
+
+## Offline Behavior and Known Limitations
+
+- Previously fetched Pokémon lists and details are available offline while their persisted cache remains valid.
+- Details that have never been fetched require an internet connection.
+- Remote Pokémon images are not explicitly stored as local files. A placeholder is displayed when an image is unavailable.
+- Offline persistence, automatic reconnection, and image recovery were successfully tested on Android Release.
+- **iOS Simulator:** NetInfo did not consistently detect reconnection after restoring the Mac's internet connection, leaving some queries paused. This behavior requires further validation on a physical iOS device.
+
+## Future Improvements
+
+- Add more presentation-layer tests for navigation, pagination, and offline states.
+- Improve offline image availability through explicit local caching.
+- Expand accessibility and responsive-layout testing.
+- Add more detailed error reporting and diagnostics.
+
+## API
+
+Pokémon data is provided by [PokéAPI](https://pokeapi.co/), a public REST API.
+
+This project is a technical assessment and is not affiliated with Nintendo, Game Freak, or The Pokémon Company.
