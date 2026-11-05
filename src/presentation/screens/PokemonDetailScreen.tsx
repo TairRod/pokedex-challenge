@@ -67,14 +67,12 @@ export function PokemonDetailScreen({ route }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     backgroundColor: theme.colors.background,
   },
   content: {
+    alignItems: 'center',
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.xl,
-    alignItems: 'center',
     gap: theme.spacing.lg,
-    paddingBottom: theme.spacing.xxxl,
   },
 });
