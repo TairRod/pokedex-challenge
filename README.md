@@ -16,6 +16,16 @@ The project focuses on maintainability, separation of concerns, type safety, tes
 - **Image fallback:** Displays a local placeholder when a remote image cannot be loaded.
 - **Reusable components:** Shares UI components, theme values, and formatting utilities.
 
+## Screenshots
+
+| Pokémon List                                                | Pokémon Detail                                                |
+| ----------------------------------------------------------- | ------------------------------------------------------------- |
+| <img src="docs/screenshots/pokemon-list.png" width="250" /> | <img src="docs/screenshots/pokemon-detail.png" width="250" /> |
+
+| Infinite Scrolling                                        | Offline State                                                |
+| --------------------------------------------------------- | ------------------------------------------------------------ |
+| <img src="docs/screenshots/pagination.png" width="250" /> | <img src="docs/screenshots/offline-state.png" width="250" /> |
+
 ## Tech Stack
 
 | Technology          | Purpose                                          |
